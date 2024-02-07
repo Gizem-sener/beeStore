@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "853006238262",
+    "project_id": "bee---store",
+    "storage_bucket": "bee---store.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853006238262:android:0b5ecf4b12bdf254d98e97",
+        "android_client_info": {
+          "package_name": "com.example.beestore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs_A7fh2sYNmyK41aB80O7OFYumH2YxiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
