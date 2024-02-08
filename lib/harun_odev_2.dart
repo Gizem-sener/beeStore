@@ -124,649 +124,493 @@ class _HarunOdev2State extends State<HarunOdev2> {
             ],
           ),
           body: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
+              child: Column(children: [
+            const SizedBox(
+              height: 10,
+            ),
+            //Arama Butonu
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: "Search Anything...",
+                  prefixIcon: Image.asset(
+                    "varliklar/search-normal.png",
+                    height: 10,
+                    width: 10,
+                  ),
+                  border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide:
+                          BorderSide(color: Color(0xFFD1D5DB), width: 1)),
                 ),
-                //Arama Butonu
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: "Search Anything...",
-                      prefixIcon: Image.asset(
-                        "varliklar/search-normal.png",
-                        height: 10,
-                        width: 10,
-                      ),
-                      border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          borderSide:
-                              BorderSide(color: Color(0xFFD1D5DB), width: 1)),
+              ),
+            ),
+            //Katagoriler
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                children: [
+                  Text(
+                    "Categories",
+                    style: TextStyle(
+                      color: Color(0xFF1F2937),
+                      fontSize: 14,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w600,
+                      height: 0.11,
+                      letterSpacing: 0.07,
                     ),
                   ),
+                  Spacer(),
+                  Text(
+                    "View All ->",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Color(0xFF6B7280),
+                      fontSize: 12,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w400,
+                      height: 0.12,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            //Kategori Resimler (Kaydırma)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: FutureBuilder(
+                future:
+                    FirebaseFirestore.instance.collection('categories').get(),
+                builder: (_, snapshot) {
+                  if (snapshot.hasData) {
+                    final categoryList =
+                        snapshot.data!.docs.map((e) => e.data()).toList();
+                    return Row(
+                      children: [
+                        const SizedBox(width: 6),
+                        for (final data in categoryList)
+                          CategoryWidget(
+                            title: data['name'],
+                            imageUrl: data['imageUrl'],
+                          ),
+                        const SizedBox(width: 16),
+                      ],
+                    );
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ),
+
+            const SizedBox(
+              height: 16,
+            ),
+
+            //Slider
+            SizedBox(
+              width: 360,
+              height: 154,
+              child: PageView(
+                controller: controller,
+                children: <Widget>[
+                  Center(
+                    child: Image.asset("Varliklar/Slider1.png"),
+                  ),
+                  Center(
+                    child: Image.asset("Varliklar/Slider2.jpg"),
+                  ),
+                  Center(
+                    child: Image.asset("Varliklar/Slider3.jpg"),
+                  ),
+                  Center(
+                    child: Image.asset("Varliklar/Slider4.jpg"),
+                  ),
+                  Center(
+                    child: Image.asset("Varliklar/Slider5.jpg"),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Icon(
+                      Icons.circle,
+                      size: 6,
+                      color: dot1,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Icon(
+                      Icons.circle,
+                      size: 6,
+                      color: dot2,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Icon(
+                      Icons.circle,
+                      size: 6,
+                      color: dot3,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Icon(
+                      Icons.circle,
+                      size: 6,
+                      color: dot4,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Icon(
+                      Icons.circle,
+                      size: 6,
+                      color: dot5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            //Deal of the day + Sayaç + Özel indirimler
+            Container(
+              color: const Color.fromRGBO(246, 246, 246, 1),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 16.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Deal of the day",
+                            style: TextStyle(
+                              color: Color(0xFF1F2937),
+                              fontSize: 14,
+                              fontFamily: "Inter",
+                              fontWeight: FontWeight.w600,
+                              height: 0.11,
+                              letterSpacing: 0.07,
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            "View All ->",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              color: Color(0xFF6B7280),
+                              fontSize: 12,
+                              fontFamily: "Inter",
+                              fontWeight: FontWeight.w400,
+                              height: 0.12,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14.0, vertical: 2),
+                          child: Container(
+                            height: 30,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: const Color.fromARGB(255, 239, 68, 68),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(
+                                "${_timeUntilTarget.inDays} DAY ${_timeUntilTarget.inHours % 24} HRS ${_timeUntilTarget.inMinutes % 60} MIN ${_timeUntilTarget.inSeconds % 60} SEC",
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromRGBO(255, 255, 255, 1),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(13.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Image.asset("varliklar/Running.png"),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text("Running Shoes"),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: const Color.fromARGB(
+                                                255, 239, 68, 68),
+                                          ),
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(5.0),
+                                            child: Text(
+                                              "Upto 40% OFF",
+                                              style: TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      255, 255, 255, 1)),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Column(
+                                      children: [
+                                        Image.asset("varliklar/Sneakers.png"),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text("Sneakers"),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: const Color.fromARGB(
+                                                255, 239, 68, 68),
+                                          ),
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(5.0),
+                                            child: Text(
+                                              "40-60% OFF",
+                                              style: TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      255, 255, 255, 1)),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 16.0),
+                                  child: Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Image.asset("varliklar/Wrist.png"),
+                                          const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Text("Wrist Watches"),
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: const Color.fromARGB(
+                                                  255, 239, 68, 68),
+                                            ),
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Text(
+                                                "Upto 40% OFF",
+                                                style: TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        255, 255, 255, 1)),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      Column(
+                                        children: [
+                                          Image.asset("varliklar/Speaker.png"),
+                                          const Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Text("Bluetooth Speakers"),
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: const Color.fromARGB(
+                                                  255, 239, 68, 68),
+                                            ),
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Text(
+                                                "40-60% OFF",
+                                                style: TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        255, 255, 255, 1)),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                //Katagoriler
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            //Hot Selling Footwear
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    "Hot Selling Footwear",
+                    style: TextStyle(
+                      color: Color(0xFF1F2937),
+                      fontSize: 14,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w600,
+                      height: 0.11,
+                      letterSpacing: 0.07,
+                    ),
+                  ),
+                  Spacer(),
+                  Text(
+                    "View All ->",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Color(0xFF6B7280),
+                      fontSize: 12,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w400,
+                      height: 0.12,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(children: [
+                for (int i = 0; i < 5; i++)
+                  const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: AnasayfaUrunWidget(
+                      resimAdresi: "varliklar/Adidas1.png",
+                      baslik: "Adidas wihite sneakers for men",
+                      usdFiyat: 66.5,
+                      indirimOrani: 50,
+                    ),
+                  ),
                 const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Categories",
-                        style: TextStyle(
-                          color: Color(0xFF1F2937),
-                          fontSize: 14,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                          height: 0.11,
-                          letterSpacing: 0.07,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        "View All ->",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Color(0xFF6B7280),
-                          fontSize: 12,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w400,
-                          height: 0.12,
-                        ),
-                      )
-                    ],
+                  padding: EdgeInsets.all(10.0),
+                  child: AnasayfaUrunWidget(
+                    resimAdresi: "varliklar/Nike1.png",
+                    baslik: "Nike wihite sneakers for men",
+                    usdFiyat: 86.5,
+                    indirimOrani: 40,
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                //Katagori Resimler (Kaydırma)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 6),
-                      FutureBuilder(
-                        future: FirebaseFirestore.instance
-                            .collection('categories')
-                            .doc('categories')
-                            .get()
-
-                        /* Future.microtask(
-                            () async {
-                            await Future.delayed(const Duration(seconds: 2));
-
-                            return "Title";
-                          },
-                          ) */
-                        ,
-                        builder: (_, snapshot) {
-                          if (snapshot.hasData) {
-                            final data = snapshot.data!.data();
-                            return CategoryWidget(
-                              title: data == null ? 'Bulunamadı' : data['name'],
-                              imageUrl: "",
-                            );
-                          } else {
-                            return const CircularProgressIndicator();
-                          }
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Fashion.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Fashion"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Electronics.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Electronics"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Appliances.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Appliances"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Beauty.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Beauty"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Furniture.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Furniture"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Fashion.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Fashion"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Electronics.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Electronics"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Appliances.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Appliances"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Beauty.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Beauty"),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              "varliklar/Furniture.png",
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text("Furniture"),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Image.asset(
+                    "varliklar/NikeSky2.png",
+                    width: 150,
                   ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                //Slider
-                SizedBox(
-                  width: 360,
-                  height: 154,
-                  child: PageView(
-                    controller: controller,
-                    children: <Widget>[
-                      Center(
-                        child: Image.asset("Varliklar/Slider1.png"),
-                      ),
-                      Center(
-                        child: Image.asset("Varliklar/Slider2.jpg"),
-                      ),
-                      Center(
-                        child: Image.asset("Varliklar/Slider3.jpg"),
-                      ),
-                      Center(
-                        child: Image.asset("Varliklar/Slider4.jpg"),
-                      ),
-                      Center(
-                        child: Image.asset("Varliklar/Slider5.jpg"),
-                      ),
-                    ],
+                )
+              ]),
+            ),
+            const SizedBox(height: 20),
+            // Recommended for you
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    "Recommended for you",
+                    style: TextStyle(
+                      color: Color(0xFF1F2937),
+                      fontSize: 14,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w600,
+                      height: 0.11,
+                      letterSpacing: 0.07,
+                    ),
+                  ),
+                  Spacer(),
+                  Text(
+                    "View All ->",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      color: Color(0xFF6B7280),
+                      fontSize: 12,
+                      fontFamily: "Inter",
+                      fontWeight: FontWeight.w400,
+                      height: 0.12,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(children: [
+                Padding(
+                  padding: const EdgeInsets.all(11.0),
+                  child: Image.asset(
+                    "varliklar/Allen.png",
+                    width: 150,
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.circle,
-                          size: 6,
-                          color: dot1,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.circle,
-                          size: 6,
-                          color: dot2,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.circle,
-                          size: 6,
-                          color: dot3,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.circle,
-                          size: 6,
-                          color: dot4,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.circle,
-                          size: 6,
-                          color: dot5,
-                        ),
-                      ),
-                    ],
+                  child: Image.asset(
+                    "varliklar/Calvin.png",
+                    width: 150,
                   ),
                 ),
-                //Deal of the day + Sayaç + Özel indirimler
-                Container(
-                  color: const Color.fromRGBO(246, 246, 246, 1),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 16.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Deal of the day",
-                                style: TextStyle(
-                                  color: Color(0xFF1F2937),
-                                  fontSize: 14,
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w600,
-                                  height: 0.11,
-                                  letterSpacing: 0.07,
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                "View All ->",
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                  color: Color(0xFF6B7280),
-                                  fontSize: 12,
-                                  fontFamily: "Inter",
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.12,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 14.0, vertical: 2),
-                              child: Container(
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: const Color.fromARGB(255, 239, 68, 68),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Text(
-                                    "${_timeUntilTarget.inDays} DAY ${_timeUntilTarget.inHours % 24} HRS ${_timeUntilTarget.inMinutes % 60} MIN ${_timeUntilTarget.inSeconds % 60} SEC",
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255)),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(14.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: const Color.fromRGBO(255, 255, 255, 1),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(13.0),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Image.asset(
-                                                "varliklar/Running.png"),
-                                            const Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Running Shoes"),
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: const Color.fromARGB(
-                                                    255, 239, 68, 68),
-                                              ),
-                                              child: const Padding(
-                                                padding: EdgeInsets.all(5.0),
-                                                child: Text(
-                                                  "Upto 40% OFF",
-                                                  style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          255, 255, 255, 1)),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        const Spacer(),
-                                        Column(
-                                          children: [
-                                            Image.asset(
-                                                "varliklar/Sneakers.png"),
-                                            const Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Sneakers"),
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: const Color.fromARGB(
-                                                    255, 239, 68, 68),
-                                              ),
-                                              child: const Padding(
-                                                padding: EdgeInsets.all(5.0),
-                                                child: Text(
-                                                  "40-60% OFF",
-                                                  style: TextStyle(
-                                                      color: Color.fromRGBO(
-                                                          255, 255, 255, 1)),
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 16.0),
-                                      child: Row(
-                                        children: [
-                                          Column(
-                                            children: [
-                                              Image.asset(
-                                                  "varliklar/Wrist.png"),
-                                              const Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text("Wrist Watches"),
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  color: const Color.fromARGB(
-                                                      255, 239, 68, 68),
-                                                ),
-                                                child: const Padding(
-                                                  padding: EdgeInsets.all(5.0),
-                                                  child: Text(
-                                                    "Upto 40% OFF",
-                                                    style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            255, 255, 255, 1)),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          const Spacer(),
-                                          Column(
-                                            children: [
-                                              Image.asset(
-                                                  "varliklar/Speaker.png"),
-                                              const Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child:
-                                                    Text("Bluetooth Speakers"),
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  color: const Color.fromARGB(
-                                                      255, 239, 68, 68),
-                                                ),
-                                                child: const Padding(
-                                                  padding: EdgeInsets.all(5.0),
-                                                  child: Text(
-                                                    "40-60% OFF",
-                                                    style: TextStyle(
-                                                        color: Color.fromRGBO(
-                                                            255, 255, 255, 1)),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                Padding(
+                  padding: const EdgeInsets.all(11.0),
+                  child: Image.asset(
+                    "varliklar/H&M.png",
+                    width: 150,
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                //Hot Selling Footwear
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Hot Selling Footwear",
-                        style: TextStyle(
-                          color: Color(0xFF1F2937),
-                          fontSize: 14,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                          height: 0.11,
-                          letterSpacing: 0.07,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        "View All ->",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Color(0xFF6B7280),
-                          fontSize: 12,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w400,
-                          height: 0.12,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(children: [
-                    for (int i = 0; i < 5; i++)
-                      const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: AnasayfaUrunWidget(
-                          resimAdresi: "varliklar/Adidas1.png",
-                          baslik: "Adidas wihite sneakers for men",
-                          usdFiyat: 66.5,
-                          indirimOrani: 50,
-                        ),
-                      ),
-                    const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: AnasayfaUrunWidget(
-                        resimAdresi: "varliklar/Nike1.png",
-                        baslik: "Nike wihite sneakers for men",
-                        usdFiyat: 86.5,
-                        indirimOrani: 40,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Image.asset(
-                        "varliklar/NikeSky2.png",
-                        width: 150,
-                      ),
-                    )
-                  ]),
-                ),
-                const SizedBox(height: 20),
-                // Recommended for you
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Recommended for you",
-                        style: TextStyle(
-                          color: Color(0xFF1F2937),
-                          fontSize: 14,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w600,
-                          height: 0.11,
-                          letterSpacing: 0.07,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        "View All ->",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: Color(0xFF6B7280),
-                          fontSize: 12,
-                          fontFamily: "Inter",
-                          fontWeight: FontWeight.w400,
-                          height: 0.12,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(children: [
-                    Padding(
-                      padding: const EdgeInsets.all(11.0),
-                      child: Image.asset(
-                        "varliklar/Allen.png",
-                        width: 150,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        "varliklar/Calvin.png",
-                        width: 150,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(11.0),
-                      child: Image.asset(
-                        "varliklar/H&M.png",
-                        width: 150,
-                      ),
-                    )
-                  ]),
-                ),
-              ],
+                )
+              ]),
             ),
-          ),
+          ])),
           drawer: Drawer(
             child: ListView(children: [
               DrawerHeader(
