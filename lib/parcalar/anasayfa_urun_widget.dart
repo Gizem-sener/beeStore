@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:beeStore/sayfalar/urun_detay.dart';
 
 class AnasayfaUrunWidget extends StatefulWidget {
   const AnasayfaUrunWidget({
@@ -26,7 +27,7 @@ class AnasayfaUrunWidget extends StatefulWidget {
 }
 
 /* String baslik = "Adidas wihite sneakers for men";
-String resimAdresi = "varliklar/Adidas1.png";
+String resimAdresi = "varliklar/resimler/Adidas1.png";
 
 double usdFiyat = 68.5;
 double indirimOrani = 50; */
@@ -43,40 +44,45 @@ const
 class _AnasayfaUrunWidgetState extends State<AnasayfaUrunWidget> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          Stack(
+    return GestureDetector(
+        onTap: () async {
+          await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const UrunDetay()));
+        },
+        child: Card(
+          child: Column(
             children: [
-              Image.asset(
-                widget.resimAdresi,
-                height: 180,
+              Stack(
+                children: [
+                  Image.asset(
+                    widget.resimAdresi,
+                    height: 180,
+                  ),
+                  const Positioned.fill(
+                    child: Center(
+                      child: Icon(Icons.favorite),
+                    ),
+                  ),
+                ],
               ),
-              const Positioned.fill(
-                child: Center(
-                  child: Icon(Icons.favorite),
-                ),
-              ),
+              Text(widget.baslik),
+              Row(
+                children: [
+                  Text(
+                    "\$${widget.usdFiyat}",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const Text(
+                    "\$136",
+                    style: TextStyle(
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                  Text("${widget.indirimOrani}% OFF"),
+                ],
+              )
             ],
           ),
-          Text(widget.baslik),
-          Row(
-            children: [
-              Text(
-                "\$${widget.usdFiyat}",
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const Text(
-                "\$136",
-                style: TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                ),
-              ),
-              Text("${widget.indirimOrani}% OFF"),
-            ],
-          )
-        ],
-      ),
-    );
+        ));
   }
 }
