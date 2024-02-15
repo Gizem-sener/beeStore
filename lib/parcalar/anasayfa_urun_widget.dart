@@ -1,88 +1,111 @@
+import 'package:beeStore/cubitler/sepet_cubit.dart';
+import 'package:beeStore/sayfalar/yuklenme_sayfasi.dart';
 import 'package:flutter/material.dart';
-import 'package:beeStore/sayfalar/urun_detay.dart';
+import 'package:beeStore/modeller/urun_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AnasayfaUrunWidget extends StatefulWidget {
-  const AnasayfaUrunWidget({
-    super.key,
-    required this.baslik,
-    required this.resimAdresi,
-    required this.usdFiyat,
-    required this.indirimOrani,
-  });
+  const AnasayfaUrunWidget({super.key, required this.urun});
 
-  final String baslik;
-  final String resimAdresi;
-  final double usdFiyat;
-  final double indirimOrani;
+  final UrunModel urun;
 
   @override
   State createState() => _AnasayfaUrunWidgetState();
-
-  /* 
-  Üstteki fonksiyonun uzun versiyonu
-  State createState() {
-    return _AnasayfaUrunWidgetState();
-  }
-   */
 }
 
-/* String baslik = "Adidas wihite sneakers for men";
-String resimAdresi = "varliklar/resimler/Adidas1.png";
+bool _favorideMi = false;
 
-double usdFiyat = 68.5;
-double indirimOrani = 50; */
-
-bool favorideMi = false;
-
-/*
-var
-final
-const
-*/
-
-// access modifier
 class _AnasayfaUrunWidgetState extends State<AnasayfaUrunWidget> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () async {
-          await Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const UrunDetay()));
-        },
-        child: Card(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Image.asset(
-                    widget.resimAdresi,
-                    height: 180,
-                  ),
-                  const Positioned.fill(
-                    child: Center(
-                      child: Icon(Icons.favorite),
+    final user = FirebaseAuth.instance.currentUser!;
+    final userDoc =
+        FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+    return Card(
+      child: SizedBox(
+        width: 180,
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Image.network(
+                  widget.urun.resimAdresi,
+                  height: 180,
+                ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {
+                        _favorideMi = !_favorideMi;
+                        setState(() {});
+                      },
+                      icon: _favorideMi
+                          ? const Icon(Icons.favorite)
+                          : const Icon(Icons.favorite_border),
                     ),
                   ),
-                ],
-              ),
-              Text(widget.baslik),
-              Row(
-                children: [
-                  Text(
-                    "\$${widget.usdFiyat}",
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: BlocBuilder<SepetCubit, List<String>>(
+                        builder: (_, sepet) {
+                      final inCart = sepet.contains(widget.urun.uid);
+
+                      return IconButton(
+                        onPressed: () {
+                          if (inCart) {
+                            userDoc.update({
+                              'cart': FieldValue.arrayRemove([widget.urun.uid])
+                            });
+                          } else {
+                            userDoc.update({
+                              'cart': FieldValue.arrayUnion([widget.urun.uid])
+                            });
+                          }
+                        },
+                        icon: inCart
+                            ? const Icon(Icons.shopping_bag)
+                            : const Icon(Icons.shopping_bag_outlined),
+                      );
+                    }),
                   ),
-                  const Text(
-                    "\$136",
-                    style: TextStyle(
-                      decoration: TextDecoration.lineThrough,
-                    ),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(widget.urun.baslik,
+                  style: const TextStyle(
+                    fontSize: 18,
+                  )),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Text(
+                  "\$${widget.urun.fiyatUSD}",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  " \$${widget.urun.fiyatUSD - (widget.urun.fiyatUSD * widget.urun.indirimOrani)}",
+                  style: const TextStyle(
+                    decoration: TextDecoration.lineThrough,
                   ),
-                  Text("${widget.indirimOrani}% OFF"),
-                ],
-              )
-            ],
-          ),
-        ));
+                ),
+                const SizedBox(width: 12),
+                Text("${(widget.urun.indirimOrani * 100).toInt()}% OFF"),
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
   }
 }

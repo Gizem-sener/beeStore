@@ -4,7 +4,7 @@ import 'package:beeStore/parcalar/app_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:beeStore/modeller/urun_model.dart';
 import 'package:flutter/material.dart';
-
+import 'package:beeStore/parcalar/sepet_button_widget.dart';
 import '../parcalar/category_widget.dart';
 
 class HarunOdev2 extends StatefulWidget {
@@ -115,13 +115,7 @@ class _HarunOdev2State extends State<HarunOdev2> {
             ),
             onPressed: () {},
           ),
-          IconButton(
-              icon: Image.asset(
-                "varliklar/resimler/bag-2.png",
-                width: 24.5,
-                height: 24.5,
-              ),
-              onPressed: () {})
+          const SepetButtonWidget(),
         ],
       ),
       body: SingleChildScrollView(
